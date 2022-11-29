@@ -1,7 +1,7 @@
 # Da Bell
 This is a project made for CS578 (Wireless Networks) class at San Diego State.
 
-Da Bell is a custom-made Ring Doorbell alternative that is low-lost and provides the same basic functionality, but without the audio and speaking capability. 
+Da Bell is a custom-made Ring Doorbell alternative that is low-lost and provides the same basic functionality, but without the audio and speaking capability. It runs on Raspberry Pi devices and hence, uses dependencies that are not available on Windows. Follow the [How to Use](#how-to-use)  section to get your Raspberry Pi device up and running.
 
 #### Git
 
@@ -49,4 +49,6 @@ For more git commands, see my [git cheat-sheet repo](https://github.com/Amark18/
 python -m venv cs578
 # activate virtual environment
 . cs578/Scripts/activate
+# install dependencies
+pip install -r requirements.txt
 ```
