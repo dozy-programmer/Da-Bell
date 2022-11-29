@@ -1,5 +1,5 @@
-# Da-Ring
-Da Ring is a custom-made Ring Doorbell alternative without audio.
+# Da Bell
+Da Bell is a custom-made Ring Doorbell alternative without audio.
 
 #### Git
 
