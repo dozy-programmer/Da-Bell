@@ -1,5 +1,7 @@
 # Da Bell
-Da Bell is a custom-made Ring Doorbell alternative without audio.
+This is a project made for CS578 (Wireless Networks) class at San Diego State.
+
+Da Bell is a custom-made Ring Doorbell alternative that is low-lost and provides the same basic functionality, but without the audio and speaking capability. 
 
 #### Git
 
