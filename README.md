@@ -39,3 +39,14 @@ git checkout <branch-name>
 ```
 
 For more git commands, see my [git cheat-sheet repo](https://github.com/Amark18/Git-Cheat-Sheet).
+
+
+#### How to use:
+
+```shell
+# make sure are in Da-Ring directory
+# create virtual environment to hold all dependencies
+python -m venv cs578
+# activate virtual environment
+. cs578/Scripts/activate
+```
