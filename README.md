@@ -43,6 +43,11 @@ For more git commands, see my [git cheat-sheet repo](https://github.com/Amark18/
 
 #### How to use:
 
+Requirements:
+- Camera
+- Button
+
+##### 1. Download dependencies
 ```shell
 # make sure are in Da-Ring directory
 # create virtual environment to hold all dependencies
@@ -52,3 +57,33 @@ python -m venv cs578
 # install dependencies
 pip install -r requirements.txt
 ```
+
+##### 2. Download [RPi-Cam-Web-Interface](https://elinux.org/RPi-Cam-Web-Interface#Installation_Instructions) by following Installation Instructions
+
+##### 3. Install Ngrok
+1. Create an [account](https://ngrok.com/) to get an auth token.
+2. Go to [Ngrok](https://ngrok.com/download) and download for Linux
+3. Extract the file
+4. Run
+```shell
+./ngrok authtoken <your-auth-token>
+# then to start tunnel on port 80 for localhost
+./ngrok http 80
+# copy the link you see after running this command 
+# and insert in you browser to see your camera feed
+```
+
+##### 4. Install [Camera](https://projects.raspberrypi.org/en/projects/getting-started-with-picamera)
+- this part is optional as you may have enabled it already
+
+##### 5. Run
+```shell
+# run door bell program
+python doorbell.py
+# program should be waiting for button input, press button
+# the Raspberry Pi will take a photo and a 3 second video
+# then it will send the user a message + photo that someone is at the door
+# user can see the 3 second video taken on the app
+```
+
+##
