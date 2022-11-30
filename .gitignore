@@ -161,4 +161,4 @@ cython_debug/
 
 # don't include virtual environment
 cs578
-secrets_private.py
+secrets_firebase_private.py
