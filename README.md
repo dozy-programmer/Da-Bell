@@ -43,7 +43,7 @@ For more git commands, see my [git cheat-sheet repo](https://github.com/Amark18/
 
 #### How to use:
 
-Requirements:
+###### Requirements:
 - Camera
 - Button
 
@@ -83,7 +83,7 @@ python doorbell.py
 # program should be waiting for button input, press button
 # the Raspberry Pi will take a photo and a 3 second video
 # then it will send the user a message + photo that someone is at the door
-# user can see the 3 second video taken on the app
+# user can see the photo and 3 second video taken on the app
 ```
 
 ##
