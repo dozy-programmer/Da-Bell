@@ -2,7 +2,7 @@ import pyrebase
 from dataclasses import dataclass
 import threading
 import functools
-from secrets_firebase_private import API_KEY, AUTH_DOMAIN, DATABASE_URL, STORAGE_BUCKET
+from secrets_firebase import API_KEY, AUTH_DOMAIN, DATABASE_URL, STORAGE_BUCKET
 
 @dataclass
 class firebase: 

@@ -159,6 +159,6 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-# don't include virtual environment
-cs578
+# don't include files in commit
 secrets_firebase_private.py
+cs578
