@@ -1,9 +1,13 @@
 # Da Bell
 This is a project made for CS578 (Wireless Networks) class at San Diego State.
 
-Da Bell is a custom-made Ring Doorbell alternative that is low-lost and provides the same basic functionality, but without the audio and speaking capability. It runs on Raspberry Pi devices and hence, uses dependencies that are not available on Windows. Follow the [How to Use](#how-to-use)  section to get your Raspberry Pi device up and running.
+Da Bell is a custom-made Ring Doorbell alternative that is low-lost and provides the same basic functionality, but without the audio and speaking capability. It runs on Raspberry Pi devices and hence, uses dependencies that are not available on Windows. Follow the [installation](#installation)  section to get your Raspberry Pi device up and running.
 
-#### Git
+### Table of Contents
+- [Git](#git)
+- [Installation](#installation)
+
+## Git:
 
 ###### Basic Git Commands :
 ```shell
@@ -38,14 +42,16 @@ git checkout <branch-name>
 
 ```
 
-For more git commands, see my [git cheat-sheet repo](https://github.com/Amark18/Git-Cheat-Sheet).
+For more git commands, see my [git-cheat-sheet](https://github.com/Amark18/Git-Cheat-Sheet) via my repository.
 
 
-#### How to use:
+## Installation:
 
-###### Requirements:
+#### Hardware Requirements:
 - Camera
+  - It is assume that a picamera is being used, if using another camera, some changes need to be made
 - Button
+  - A button is connected to GPIO Pin 17
 
 ##### 1. Download dependencies
 ```shell
@@ -85,5 +91,4 @@ python doorbell.py
 # then it will send the user a message + photo that someone is at the door
 # user can see the photo and 3 second video taken on the app
 ```
-
 ##
