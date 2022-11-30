@@ -1,6 +1,6 @@
 # enter your firebase credentials
 
-# link to JSON file from firebase
-FIREBASE_CRED = ""
-# <project-id>.appspot.com
+API_KEY = ""
+AUTH_DOMAIN = ""
+DATABASE_URL = ""
 STORAGE_BUCKET = ""

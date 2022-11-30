@@ -7,6 +7,8 @@ import os
 from datetime import datetime
 from dataclasses import dataclass
 from pyngrok import ngrok
+import data_base
+import mms
 
 @dataclass
 class Helper:
@@ -14,6 +16,7 @@ class Helper:
     ERROR = "Error running commmand"
     
     # constants
+    GPIO_PIN = 17
     start_stream = "./start.sh"
     stop_stream  = "./stop.sh"
     stream_dir = "/home/little_one/Desktop/DaRing/RPi_Cam_Web_Interface"
@@ -25,7 +28,7 @@ class Helper:
     
     # return a jpg filename based on current time and date
     def create_filename_name(is_photo):
-        file_extension = media_type = ".jpg" if is_photo else ".h264"
+        file_extension = ".jpg" if is_photo else ".h264"
         now = datetime.now()
         current_date = now.strftime("%m_%d_%Y")
         current_time = now.strftime("%I_%M_%S_%p")
@@ -36,7 +39,7 @@ class Helper:
 def wait_for_doorbell(firebase_database):
     print("Waiting for door bell to be pressed...")
     # button connected to GPIO pin 17
-    button = Button(17)
+    button = Button(Helper.GPIO_PIN)
 
     # wait until button is pressed to continue
     button.wait_for_press()
@@ -59,11 +62,8 @@ def wait_for_doorbell(firebase_database):
     firebase_database.upload_file(shortclip_filename, shortclip_path, False)
     
     # send the owner a text message that doorbell was pressed
-    send_text_message()
+    mms.send_text_message()
     print("DoorBell pressed")
-
-def send_text_message():
-    print("[TO DO] Send text message")
     
 # start streaming camera to server
 def start_stream():
@@ -71,7 +71,7 @@ def start_stream():
     change_directory(Helper.stream_dir)
     # start stream
     stream_output = run_shell_command(Helper.start_stream)
-    print("Starting stream")
+    print("Streaming...")
     
     return push_camera_to_server()
     
@@ -81,7 +81,7 @@ def stop_stream():
     change_directory(Helper.stream_dir)
     # stop stream
     output = run_shell_command(Helper.stop_stream)
-    print("Stopping stream")
+    print("Stopped streaming")
     
 # change current working directory
 def change_directory(new_dir):
@@ -93,7 +93,7 @@ def push_camera_to_server():
     # change directory
     change_directory(Helper.desktop_dir)
     # kill all ngrok processes, there should not be any running
-    output = run_shell_command(Helper.stop_ngrok)
+    run_shell_command(Helper.stop_ngrok)
     # start ngrok server
     print("Starting server...")
     start_server_result = ngrok.connect(bind_tls=True)
@@ -104,7 +104,7 @@ def run_shell_command(command):
     try:
         output = subprocess.Popen(command, shell=True)
         result = output.communicate()[0]
-    
+        # if out is not None, then return it
         if result is not None:
             return result
     except:
@@ -115,7 +115,7 @@ def run_shell_command(command):
 def create_folder(current_dir, folder_name):
     folder_path = os.path.join(current_dir, folder_name)
     if os.path.exists(folder_path) == False:
-        file = os.path.join(folder_path, folder_name)
+        os.path.join(folder_path, folder_name)
         os.makedirs(folder_path)
     return folder_path
 
@@ -131,7 +131,9 @@ def take_photo():
     # take photo
     photo_filename, formatted_date = Helper.create_filename_name(True)
     photo_path = f"{photos_dir}/{photo_filename}"
+    # take image and save to path
     camera.capture(photo_path)
+    # close camera after using
     camera.close()
     return photo_path, photo_filename, formatted_date
 
@@ -152,18 +154,23 @@ def take_shortclip():
     
     shortclip_filename, formatted_date = Helper.create_filename_name(False)
     shortclip_path = f"{shortclips_dir}/{shortclip_filename}"
+    # start recording 3 second video
     camera.start_recording(shortclip_path)
     print("Recording started...")
-    # record 3 second video
+    # record 3 second video, 
     camera.wait_recording(6)
     camera.stop_recording()
-    print("Recording Stopped...")
+    print("Recording stopped...")
+    # close camera after using
     camera.close()
     
     # convert .h264 file to .mp4 and delete .h264 file
     new_shortclip_path = shortclip_path.replace(".h264", ".mp4")
-    run_shell_command(f"MP4Box -add {shortclip_path} {new_shortclip_path}")
+    # convert .h264 file to mp4, redirect output so that no results show
+    run_shell_command(f"MP4Box -add {shortclip_path} {new_shortclip_path} >/dev/null 2>&1")
+    # remove .h264 file since a new .mp4 file was created
     run_shell_command(f"rm {shortclip_path}")
+    # update path
     shortclip_path = new_shortclip_path 
     shortclip_filename = shortclip_filename.replace(".h264", ".mp4") 
     
@@ -178,11 +185,11 @@ def main():
     # upload public url link to firebase
     firebase_database.add_link_to_live_feed(server_link)
     
-    # run doorbell thread on another thread
+    # run doorbell again after it is pressed
+    # and photo & video is taken
     while True:
-        ringbell_thread = Thread(target = wait_for_doorbell, args=(firebase_database,))
-        ringbell_thread.start()
-        ringbell_thread.join()
+        wait_for_doorbell(firebase_database)
+    
     
 if __name__ == '__main__':
     main()
