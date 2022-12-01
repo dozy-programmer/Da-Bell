@@ -1,12 +1,13 @@
+import helper
 
-
-# This program sents an MMS message to owner
-# of a Da Bell device to notify that someone
-# is at the door
+''' 
+This program sends an MMS message to the owner of a 
+Da Bell device to notify them that someone is at the door.
+'''
 
 class mms:
-    # define constants here
     
     @staticmethod
+    @helper.threaded
     def send_text_message():
         print("[TO DO] Send text message")

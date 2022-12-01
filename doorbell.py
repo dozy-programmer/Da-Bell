@@ -1,48 +1,23 @@
 from gpiozero import LED
 from gpiozero import Button
-from threading import Thread
 from picamera import PiCamera
-import subprocess
-import os
-from datetime import datetime
-from dataclasses import dataclass
 from pyngrok import ngrok
+import helper
 import data_base
 import mms
+import subprocess
+import os
 
-@dataclass
-class Helper:
-    # error message
-    ERROR = "Error running commmand"
-    
-    # constants
-    GPIO_PIN = 17
-    start_stream = "./start.sh"
-    stop_stream  = "./stop.sh"
-    stream_dir = "/home/little_one/Desktop/DaRing/RPi_Cam_Web_Interface"
-    push_to_server = "./ngrok http 80"
-    desktop_dir = "/home/little_one/Desktop/DaRing"
-    photos_dir = "Photos"
-    shortclips_dir = "ShortClips"
-    stop_ngrok  = "killall ngrok"
-    
-    # return a jpg filename based on current time and date
-    def create_filename_name(is_photo):
-        file_extension = ".jpg" if is_photo else ".h264"
-        now = datetime.now()
-        current_date = now.strftime("%m_%d_%Y")
-        current_time = now.strftime("%I_%M_%S_%p")
-        formatted_date = now.strftime("%b %d, %Y %I:%M:%S %p")
-        return f"{current_date}_{current_time}{file_extension}", formatted_date
-
-
+# waits until a button ("doorbell") is pressed
+# and takes a photo + video, then uploads to firebase
 def wait_for_doorbell(firebase_database):
     print("Waiting for door bell to be pressed...")
-    # button connected to GPIO pin 17
-    button = Button(Helper.GPIO_PIN)
+    # button connected to GPIO PIN 17 
+    button = Button(helper.GPIO_PIN)
 
     # wait until button is pressed to continue
     button.wait_for_press()
+    print("DoorBell pressed")
     
     # stop stream
     stop_stream()
@@ -63,24 +38,33 @@ def wait_for_doorbell(firebase_database):
     
     # send the owner a text message that doorbell was pressed
     mms.send_text_message()
-    print("DoorBell pressed")
+    
+    # resume steaming to online server
+    resume_stream()
     
 # start streaming camera to server
 def start_stream():
     # change directory
-    change_directory(Helper.stream_dir)
+    change_directory(helper.stream_dir)
     # start stream
-    stream_output = run_shell_command(Helper.start_stream)
+    run_shell_command(helper.start_stream)
     print("Streaming...")
-    
     return push_camera_to_server()
+
+# start streaming camera to server
+def resume_stream():
+    # change directory
+    change_directory(helper.stream_dir)
+    # resume stream
+    run_shell_command(helper.start_stream)
+    print("Resuming Streaming...")
     
-# stop stream camera to server
+# stop streaming camera feed to server
 def stop_stream():
     # change directory
-    change_directory(Helper.stream_dir)
+    change_directory(helper.stream_dir)
     # stop stream
-    output = run_shell_command(Helper.stop_stream)
+    run_shell_command(helper.stop_stream)
     print("Stopped streaming")
     
 # change current working directory
@@ -91,27 +75,28 @@ def change_directory(new_dir):
 # return public url link to camera feed
 def push_camera_to_server():
     # change directory
-    change_directory(Helper.desktop_dir)
-    # kill all ngrok processes, there should not be any running
-    run_shell_command(Helper.stop_ngrok)
+    change_directory(helper.desktop_dir)
+    # kill ngrok process, it should not be running
+    run_shell_command(helper.stop_ngrok)
     # start ngrok server
     print("Starting server...")
     start_server_result = ngrok.connect(bind_tls=True)
     return f"{start_server_result.public_url}/html"
     
 # runs a command in shell
+# return result (if there is any)
 def run_shell_command(command):
     try:
         output = subprocess.Popen(command, shell=True)
         result = output.communicate()[0]
-        # if out is not None, then return it
+        # if result is not None, then return the string
         if result is not None:
             return result
     except:
-        return Helper.ERROR
+        return helper.ERROR
     
 # creates a folder in a desired directory
-# returns new path
+# returns path of new folder created
 def create_folder(current_dir, folder_name):
     folder_path = os.path.join(current_dir, folder_name)
     if os.path.exists(folder_path) == False:
@@ -120,18 +105,18 @@ def create_folder(current_dir, folder_name):
     return folder_path
 
 # take a photo
-# return photo path, photo filename, and its date (formatted)
+# return photo path, photo filename, and date (formatted)
 def take_photo():
     # change directory
-    change_directory(Helper.desktop_dir)
+    change_directory(helper.desktop_dir)
     # if Photos folder does not exist, create it
-    photos_dir = create_folder(os.getcwd(), Helper.photos_dir)            
+    photos_dir = create_folder(os.getcwd(), helper.photos_dir)            
     # open camera
     camera = PiCamera()
-    # take photo
-    photo_filename, formatted_date = Helper.create_filename_name(True)
+    # create path to save photo to
+    photo_filename, formatted_date = helper.create_filename_name(True)
     photo_path = f"{photos_dir}/{photo_filename}"
-    # take image and save to path
+    # take photo and save to path
     camera.capture(photo_path)
     # close camera after using
     camera.close()
@@ -141,40 +126,40 @@ def take_photo():
 # return video path, video filename, and its date (formatted)
 def take_shortclip():
     # change directory
-    change_directory(Helper.desktop_dir)
+    change_directory(helper.desktop_dir)
     # if ShortCLips folder does not exist, create it
-    shortclips_dir = create_folder(os.getcwd(), Helper.shortclips_dir)            
+    shortclips_dir = create_folder(os.getcwd(), helper.shortclips_dir)      
+          
     # open camera
     camera = PiCamera()
-    
     # camera preferences
     camera.vflip = False
     camera.framerate = 15
     camera.resolution = (720, 440)
+    # will need to add this as frame rate is off, currently too fast
+    # camera.framerate = 25
     
-    shortclip_filename, formatted_date = Helper.create_filename_name(False)
+    shortclip_filename, formatted_date = helper.create_filename_name(False)
     shortclip_path = f"{shortclips_dir}/{shortclip_filename}"
     # start recording 3 second video
     camera.start_recording(shortclip_path)
     print("Recording started...")
-    # record 3 second video, 
-    camera.wait_recording(6)
+    # record 3 second video
+    camera.wait_recording(helper.VIDEO_DURATION)
     camera.stop_recording()
     print("Recording stopped...")
     # close camera after using
     camera.close()
     
     # convert .h264 file to .mp4 and delete .h264 file
-    new_shortclip_path = shortclip_path.replace(".h264", ".mp4")
-    # convert .h264 file to mp4, redirect output so that no results show
+    new_shortclip_path = shortclip_path.replace(helper.H264_EXT, helper.MP4_EXT)
+    # convert .h264 file to mp4, redirect output so that no results show in terminal
     run_shell_command(f"MP4Box -add {shortclip_path} {new_shortclip_path} >/dev/null 2>&1")
-    # remove .h264 file since a new .mp4 file was created
+    # delete .h264 file since a new .mp4 file was created
     run_shell_command(f"rm {shortclip_path}")
-    # update path
-    shortclip_path = new_shortclip_path 
-    shortclip_filename = shortclip_filename.replace(".h264", ".mp4") 
-    
-    return shortclip_path, shortclip_filename, formatted_date
+    # update file name to be .mp4 since .h264 file no longer exists
+    shortclip_filename = shortclip_filename.replace(helper.H264_EXT, helper.MP4_EXT) 
+    return new_shortclip_path, shortclip_filename, formatted_date
     
 def main():
     # init database
@@ -186,7 +171,7 @@ def main():
     firebase_database.add_link_to_live_feed(server_link)
     
     # run doorbell again after it is pressed
-    # and photo & video is taken
+    # and photo-video are taken
     while True:
         wait_for_doorbell(firebase_database)
     
