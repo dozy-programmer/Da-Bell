@@ -13,11 +13,11 @@ Da Bell is a custom-made Ring Doorbell alternative that is low-lost and provides
 ```shell
 # CLONING AN EXISTING REPO 
 # note: make sure you are in your desired directory
-git clone https://github.com/Amark18/Da-Ring.git
+https://github.com/Amark18/Da-Bell.git
 # go inside project directory
-cd Da-Ring
+cd Da-Bell
 # set the remote url so when you push/pull, it goes to GitHub
-git remote set-url origin https://github.com/Amark18/Da-Ring.git
+git remote set-url origin https://github.com/Amark18/Da-Bell.git
 
 # TO COMMIT CHANGES
 # add files so that you can push to repo
@@ -49,13 +49,13 @@ For more git commands, see my [git-cheat-sheet](https://github.com/Amark18/Git-C
 
 #### Hardware Requirements:
 - Camera
-  - It is assume that a picamera is being used, if using another camera, some changes need to be made
+  - RPi Cam Web Interface requires a PiCamera. 
 - Button
-  - A button is connected to GPIO Pin 17
+  - Connect Raspberry Pi GPIO Pin 17 to button.
 
 ##### 1. Download dependencies
 ```shell
-# make sure are in Da-Ring directory
+# make sure are in Da-Bell directory
 # create virtual environment to hold all dependencies
 python -m venv cs578
 # activate virtual environment
@@ -65,11 +65,13 @@ pip install -r requirements.txt
 ```
 
 ##### 2. Download [RPi-Cam-Web-Interface](https://elinux.org/RPi-Cam-Web-Interface#Installation_Instructions) by following Installation Instructions
+- Set settings to default during set-up.
+- After set-up, it will ask to start camera, select <yes>.
 
 ##### 3. Install Ngrok
 1. Create an [account](https://ngrok.com/) to get an auth token.
-2. Go to [Ngrok](https://ngrok.com/download) and download for Linux
-3. Extract the file
+2. Go to [Ngrok](https://ngrok.com/download) and Download for Linux.
+3. Extract/Unzip the file.
 4. Run
 ```shell
 ./ngrok authtoken <your-auth-token>
@@ -79,11 +81,11 @@ pip install -r requirements.txt
 # and insert in you browser to see your camera feed
 ```
 
-##### 4. Install [Camera](https://projects.raspberrypi.org/en/projects/getting-started-with-picamera)
-- this part is optional as you may have enabled it already
-
-##### 5. Run
+##### 4. Run
 ```shell
+# make sure you are Da-Bell directory
+# to check your current directory
+pwd
 # run door bell program
 python doorbell.py
 # program should be waiting for button input, press button
