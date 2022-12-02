@@ -32,15 +32,19 @@ ERROR = "Error running commmand"
 GPIO_PIN = 17
 H264_EXT = ".h264"
 VIDEO_DURATION = 3 << 1
-start_stream = "./start.sh"
-stop_stream  = "./stop.sh"
-stream_dir = "/home/littleone/Desktop/Da-Bell/RPi_Cam_Web_Interface"
-push_to_server = "./ngrok http 80"
-desktop_dir = "/home/littleone/Desktop/Da-Bell"
-photos_dir = "Photos"
-shortclips_dir = "ShortClips"
-stop_ngrok  = "killall ngrok"
+# commands
+START_STREAM = "./start.sh"
+STOP_STREAM  = "./stop.sh"
+PUSH_TO_SERVER = "./ngrok http 80"
+STOP_NGROK  = "killall ngrok"
+# directories
+STREAM_DIR = "/home/littleone/Desktop/Da-Bell/RPi_Cam_Web_Interface"
+DESKTOP_DIR = "/home/littleone/Desktop/Da-Bell"
+# folder names
+PHOTOS_FOLDER = "Photos"
+SHORTCLIPS_FOLDER = "ShortClips"
 
+# checks to see if any credentials in secrets_firebase.py is empty
 def is_credentials_added():
     return EMPTY not in [API_KEY, AUTH_DOMAIN, DATABASE_URL, STORAGE_BUCKET]
 

@@ -194,8 +194,8 @@ def main():
     # start motion detection
     start_motion_detection()
     
-    # run doorbell again after it is pressed
-    # and photo+video are taken and uploaded
+    # wait for button press again after finishing
+    # taking a photo + video and uploading them
     while True:
         wait_for_doorbell(firebase_database)
     
