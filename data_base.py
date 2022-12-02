@@ -3,12 +3,16 @@ from dataclasses import dataclass
 import helper
 
 '''
-This program deals with uploading data to firebase 
+This program upload data to firebase 
 database and media to firebase storage. 
 '''
 
 @dataclass
-class firebase:         
+class firebase:
+    # check if credentials was added
+    if not helper.is_credentials_added():
+        raise helper.NoCredentialsAdded
+    
     # initialize firebase using config credentials
     firebase = pyrebase.initialize_app(helper.config)
     # get a reference to the database service

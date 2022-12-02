@@ -1,7 +1,7 @@
 import threading
 import functools
 from datetime import datetime
-from secrets_firebase import API_KEY, AUTH_DOMAIN, DATABASE_URL, STORAGE_BUCKET
+from secrets_firebase_private import API_KEY, AUTH_DOMAIN, DATABASE_URL, STORAGE_BUCKET
 
 '''
 This is a helper class that contains constants 
@@ -15,6 +15,9 @@ config = {
     "databaseURL": DATABASE_URL,
     "storageBucket": STORAGE_BUCKET
 }
+
+# constants
+EMPTY = ""
 
 # database_base.py constants
 LINK_KEY = "link"
@@ -31,12 +34,27 @@ H264_EXT = ".h264"
 VIDEO_DURATION = 3 << 1
 start_stream = "./start.sh"
 stop_stream  = "./stop.sh"
-stream_dir = "/home/little_one/Desktop/DaRing/RPi_Cam_Web_Interface"
+stream_dir = "/home/littleone/Desktop/Da-Bell/RPi_Cam_Web_Interface"
 push_to_server = "./ngrok http 80"
-desktop_dir = "/home/little_one/Desktop/DaRing"
+desktop_dir = "/home/littleone/Desktop/Da-Bell"
 photos_dir = "Photos"
 shortclips_dir = "ShortClips"
 stop_ngrok  = "killall ngrok"
+
+def is_credentials_added():
+    return EMPTY not in [API_KEY, AUTH_DOMAIN, DATABASE_URL, STORAGE_BUCKET]
+
+# exceptions
+class NoCredentialsAdded(Exception):
+    def __str__(self):
+        return "Credentials missing from secrets_firebase.py file!"
+
+# create a curl command to start/stop motion detection
+def get_motion_detection_command(is_starting):
+    # 201 to start motion detection, 200 to stop
+    command = 201 if is_starting else 200
+    # adding curl to open link, therefore running command
+    return f"curl localhost:80/html/cmd_pipe.php?cmd=md%{command}"
 
 # create a filename based on current time and date
 def create_filename_name(is_photo):

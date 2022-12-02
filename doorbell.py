@@ -2,6 +2,7 @@ from gpiozero import LED
 from gpiozero import Button
 from picamera import PiCamera
 from pyngrok import ngrok
+from time import sleep
 import helper
 import data_base
 import mms
@@ -19,8 +20,12 @@ def wait_for_doorbell(firebase_database):
     button.wait_for_press()
     print("DoorBell pressed")
     
+    # stop motion detection
+    stop_motion_detection()
     # stop stream
     stop_stream()
+    # ensures that motion detection and streaming have stopped
+    sleep(1)
     
     # take a photo
     photo_path, photo_filename, formatted_date = take_photo()
@@ -38,9 +43,13 @@ def wait_for_doorbell(firebase_database):
     
     # send the owner a text message that doorbell was pressed
     mms.send_text_message()
+    # mark completion (doorbell press has been handled)
+    print(f"{' END ':-^30}")
     
     # resume steaming to online server
     resume_stream()
+    # resume motion detection
+    start_motion_detection()
     
 # start streaming camera to server
 def start_stream():
@@ -48,7 +57,7 @@ def start_stream():
     change_directory(helper.stream_dir)
     # start stream
     run_shell_command(helper.start_stream)
-    print("Streaming...")
+    print(f"{' START ':-^30}\nStreaming...")
     return push_camera_to_server()
 
 # start streaming camera to server
@@ -67,13 +76,17 @@ def stop_stream():
     run_shell_command(helper.stop_stream)
     print("Stopped streaming")
 
-# enable motion detection    
+# enable motion detection
 def start_motion_detection():
-    start_motion_command = "http://path.to.camera/html/cmd_pipe.php?cmd=md%200"
+    start_motion_command = helper.get_motion_detection_command(True)
+    response = run_shell_command(start_motion_command)
+    print(f"Starting motion detection {'' if response is None else f'-> Response: {response}'}")
 
 # disable motion detection
 def stop_motion_detection():
-    stop_motion_detection = "http://path.to.camera/html/cmd_pipe.php?cmd=md%201"
+    stop_motion_command = helper.get_motion_detection_command(False)
+    response = run_shell_command(stop_motion_command)
+    print(f"Stopping motion detection {'' if response is None else f'-> Response: {response}'}")
     
 # change current working directory
 def change_directory(new_dir):
@@ -144,8 +157,8 @@ def take_shortclip():
     camera.vflip = False
     camera.framerate = 15
     camera.resolution = (720, 440)
-    # will need to add this as frame rate is off, currently too fast
-    # camera.framerate = 25
+    # change frame rate
+    camera.framerate = 20
     
     shortclip_filename, formatted_date = helper.create_filename_name(False)
     shortclip_path = f"{shortclips_dir}/{shortclip_filename}"
@@ -174,12 +187,15 @@ def main():
     firebase_database = data_base.firebase()
     
     # start streaming
-    server_link = start_stream()
+    stream_link = start_stream()
+    print(f"Streaming Link -> {stream_link}")
     # upload public url link to firebase
-    firebase_database.add_link_to_live_feed(server_link)
+    firebase_database.add_link_to_live_feed(stream_link)
+    # start motion detection
+    start_motion_detection()
     
     # run doorbell again after it is pressed
-    # and photo-video are taken
+    # and photo+video are taken and uploaded
     while True:
         wait_for_doorbell(firebase_database)
     
