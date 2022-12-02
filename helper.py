@@ -1,7 +1,7 @@
 import threading
 import functools
 from datetime import datetime
-from secrets_firebase_private import API_KEY, AUTH_DOMAIN, DATABASE_URL, STORAGE_BUCKET
+from secrets_firebase import API_KEY, AUTH_DOMAIN, DATABASE_URL, STORAGE_BUCKET
 
 '''
 This is a helper class that contains constants 

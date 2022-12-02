@@ -24,7 +24,7 @@ def wait_for_doorbell(firebase_database):
     stop_motion_detection()
     # stop stream
     stop_stream()
-    # ensures that motion detection and streaming have stopped
+    # give motion detection and streaming some extra time to stop
     sleep(1)
     
     # take a photo
