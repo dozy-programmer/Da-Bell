@@ -8,7 +8,7 @@ database and media to firebase storage.
 '''
 
 @dataclass
-class firebase:     
+class firebase:         
     # initialize firebase using config credentials
     firebase = pyrebase.initialize_app(helper.config)
     # get a reference to the database service

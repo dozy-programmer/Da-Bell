@@ -66,6 +66,14 @@ def stop_stream():
     # stop stream
     run_shell_command(helper.stop_stream)
     print("Stopped streaming")
+
+# enable motion detection    
+def start_motion_detection():
+    start_motion_command = "http://path.to.camera/html/cmd_pipe.php?cmd=md%200"
+
+# disable motion detection
+def stop_motion_detection():
+    stop_motion_detection = "http://path.to.camera/html/cmd_pipe.php?cmd=md%201"
     
 # change current working directory
 def change_directory(new_dir):
