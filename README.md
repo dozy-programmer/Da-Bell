@@ -95,4 +95,11 @@ Da Bell also has an [iOS app](https://github.com/CollinLTT/CS578-Da-Bell) where 
   
 ## Improvements:
 
-Audio and speaker capabilities can be added to Da Bell, but was not included to keep costs to a minimum. In addition, this prototype was created to only show video because there isn't many low-cost options that did not include extra hardware (like a speaker and microphone, thus higher price). In essense, we wanted to make a modular door bell camera that can be improved by just plugging in hardware and enabling the respective feature. These features can be added without any issues to existing project. In conclusion, Da bell is a base prototype and anyone can improve Da Bell!
+Audio and speaker capabilities can be added to Da Bell, but was not included to keep costs to a minimum. In addition, this prototype was created to only show video because there isn't many low-cost options that did not include extra hardware (like a speaker and microphone, thus higher price). In essense, we wanted to make a modular door bell camera that can be improved by just plugging in hardware and enabling the respective feature. These features can be added without any issues to existing project. Therefore, Da bell is a base prototype and anyone can improve Da Bell!
+
+Idea(s):
+ - when motion is detected, send the user a text message
+  - How can this be accomplished? (some ideas)
+  - this can be enabled/disabled via the iOS App
+  - iOS changes camera settings in firebase
+  - Raspberry Pi listens to changes in camera setting from firebase
