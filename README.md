@@ -1,49 +1,12 @@
 # Da Bell
 This is a project made for CS578 (Wireless Networks) class at San Diego State.
 
-Da Bell is a custom-made Ring Doorbell alternative that is low-lost and provides the same basic functionality, but without the audio and speaking capability. It runs on Raspberry Pi devices and hence, uses dependencies that are not available on Windows. Follow the [installation](#installation)  section to get your Raspberry Pi device up and running.
+Da Bell is a custom-made Ring Doorbell alternative that is low-lost and provides the same basic functionality, but without the audio and speaking capability. It runs on Raspberry Pi devices and hence, uses dependencies that are not available on Windows. Follow the [installation](#installation) section to get your Raspberry Pi device up and running.
 
 ### Table of Contents
-- [Git](#git)
 - [Installation](#installation)
-
-## Git:
-
-###### Basic Git Commands :
-```shell
-# CLONING AN EXISTING REPO 
-# note: make sure you are in your desired directory
-https://github.com/Amark18/Da-Bell.git
-# go inside project directory
-cd Da-Bell
-# set the remote url so when you push/pull, it goes to GitHub
-git remote set-url origin https://github.com/Amark18/Da-Bell.git
-
-# TO COMMIT CHANGES
-# add files so that you can push to repo
-git add .
-# commit/confirm your changes
-git commit -m "explain what you did, but keep it short and concise"
-# push your changes to Github
-git push
-
-#### NICE TO KNOW COMMANDS ####
-# see the status of the project files since last commit
-git status
-
-# pull and merge project files from Github Repo
-git pull
-
-# create and switch to new branch
-git checkout -b <branch-name>
-
-# to switch between branches
-git checkout <branch-name>
-
-```
-
-For more git commands, see my [git-cheat-sheet](https://github.com/Amark18/Git-Cheat-Sheet) via my repository.
-
+- [iOS App](#ios-app)
+- [Improvements](#improvements)
 
 ## Installation:
 
@@ -62,6 +25,9 @@ python -m venv cs578
 . cs578/Scripts/activate
 # install dependencies
 pip install -r requirements.txt
+# low chance there might be more imports 
+# than in requirements.txt so take that 
+# into consideration when running code
 ```
 
 ##### 2. Download [RPi-Cam-Web-Interface](https://elinux.org/RPi-Cam-Web-Interface#Installation_Instructions) by following Installation Instructions
@@ -72,7 +38,8 @@ pip install -r requirements.txt
 1. Create an [account](https://ngrok.com/) to get an auth token.
 2. Go to [Ngrok](https://ngrok.com/download) and Download for Linux.
 3. Extract/Unzip the file.
-4. Run
+4. Required: place ngrok file inside Da Bell folder
+5. Run the following in your command line:
 ```shell
 ./ngrok authtoken <your-auth-token>
 # then to start tunnel on port 80 for localhost
@@ -94,3 +61,18 @@ python doorbell.py
 # user can see the photo and 3 second video taken on the app
 ```
 ##
+
+## iOS App:
+
+Da Bell also has an [iOS app](https://github.com/CollinLTT/CS578-Da-Bell) where you can do the following:
+- view live feed
+- see all photos taken when doorbell was pressed 
+  - saved on firebase storage
+- see all 3-second videos taken when doorbell was pressed 
+  - saved on firebase storage
+- see videos of all motion detected activites
+  - saved on the Raspberry Pi
+  
+## Improvements:
+
+Audio and speaker capabilities can be added to Da Bell, but was not included to keep costs to a minimum. In addition, this prototype was created to only show video because there isn't many low-cost options that did not include extra hardware (like a speaker and microphone, thus higher price). In essense, we wanted to make a modular door bell camera that can be improved by just plugging in hardware and enabling the respective feature. These features can be added without any issues to existing project. In conclusion, Da bell is a base prototype and anyone can improve Da Bell!
