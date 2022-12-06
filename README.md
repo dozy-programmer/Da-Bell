@@ -4,9 +4,14 @@ This is a project made for CS578 (Wireless Networks) class at San Diego State.
 Da Bell is a custom-made Ring Doorbell alternative that is low-lost and provides the same basic functionality, but without the audio and speaking capability. It runs on Raspberry Pi devices and hence, uses dependencies that are not available on Windows. Follow the [installation](#installation) section to get your Raspberry Pi device up and running.
 
 ### Table of Contents
+- [Capabilities](#capabilities)
 - [Installation](#installation)
 - [iOS App](#ios-app)
 - [Improvements](#improvements)
+
+## Capabilities:
+
+Da Bell can stream the camera feed from a Raspberry Pi device to a public facing server that can be accessed via a link. The link is uploaded to firebase database so that the iOS app can show the feed in a webview. In addition, if the doorbell is pressed, a photo and a 3 second video is taken and uploaded to firebase storage so that it can be viewed on the iOS app while simultaneously, a message is sent to the Da Bell owner that the doorbell was pressed and a photo is attached for them to view. Lastly, motion detection is utilized so that when motion is detected, the camera feed is saved locally on the Raspberry Pi and it can be viewed by the owner via the iOS app. 
 
 ## Installation:
 
@@ -38,7 +43,7 @@ pip install -r requirements.txt
 1. Create an [account](https://ngrok.com/) to get an auth token.
 2. Go to [Ngrok](https://ngrok.com/download) and Download for Linux.
 3. Extract/Unzip the file.
-4. Required: place ngrok file inside Da Bell folder
+4. Required: place ngrok file inside Da Bell folder.
 5. Run the following in your command line:
 ```shell
 ./ngrok authtoken <your-auth-token>
@@ -48,7 +53,18 @@ pip install -r requirements.txt
 # and insert in you browser to see your camera feed
 ```
 
-##### 4. Run
+##### 4. Add Credentials
+Enter all the credentials needed in da_bell_secrets.py file, program will not run otherwise.  
+
+Required:  
+- firebase information
+  - to upload photo/video data and files.
+- phone number and carrier
+  - to send a message when doorbell is pressed
+- gmail account and password
+  - to send a message when doorbell is pressed
+
+##### 5. Run
 ```shell
 # make sure you are Da-Bell directory
 # to check your current directory
