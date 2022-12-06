@@ -44,7 +44,7 @@ DESKTOP_DIR = "/home/littleone/Desktop/Da-Bell"
 PHOTOS_FOLDER = "Photos"
 SHORTCLIPS_FOLDER = "ShortClips"
 
-# checks to see if any credentials in secrets_firebase.py is empty
+# see if credentials exist in secrets_firebase.py
 def is_credentials_added():
     return EMPTY not in [API_KEY, AUTH_DOMAIN, DATABASE_URL, STORAGE_BUCKET]
 
