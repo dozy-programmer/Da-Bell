@@ -25,6 +25,9 @@ python -m venv cs578
 . cs578/Scripts/activate
 # install dependencies
 pip install -r requirements.txt
+# low chance there might be more imports 
+# than in requirements.txt so take that 
+# into consideration when running code
 ```
 
 ##### 2. Download [RPi-Cam-Web-Interface](https://elinux.org/RPi-Cam-Web-Interface#Installation_Instructions) by following Installation Instructions
