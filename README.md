@@ -17,7 +17,7 @@ Da Bell can stream the camera feed from a Raspberry Pi device to a public facing
 
 #### OS Requirement:
 - Buster
- - this was used instead of bulls-eye due to compatibility issues with packages + RPi Cam Web Interface.
+ - used instead of bulls-eye due to compatibility issues with packages + RPi Cam Web Interface.
 
 #### Hardware Requirements:
 - Camera
