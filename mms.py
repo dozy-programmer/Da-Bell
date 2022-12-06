@@ -1,5 +1,5 @@
 import helper
-from da_bell_secrets_private import *
+from da_bell_secrets import *
 import smtplib, ssl
 from providers import PROVIDERS
 # used for MMS
