@@ -100,7 +100,7 @@ Audio and speaker capabilities can be added to Da Bell, but was not included to 
 Ideas:
  - when motion is detected, send the user a text message
  - change setting to send user a text when motion is detected
-  - How can this be accomplished? 
-    - this can be enabled/disabled via the iOS App
-    - iOS changes camera settings in firebase
-    - Raspberry Pi listens to changes in camera setting from firebase
+   - How can this be accomplished? 
+     - this can be enabled/disabled via the iOS App
+     - iOS changes camera settings in firebase
+     - Raspberry Pi listens to changes in camera setting from firebase
