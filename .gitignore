@@ -161,6 +161,6 @@ cython_debug/
 
 # local files and folders to not commit
 # files
-secrets_firebase_private.py
+da_bell_secrets_private.py
 # folders
 cs578

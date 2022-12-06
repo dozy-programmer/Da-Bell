@@ -1,7 +1,7 @@
 import threading
 import functools
 from datetime import datetime
-from secrets_firebase import API_KEY, AUTH_DOMAIN, DATABASE_URL, STORAGE_BUCKET
+from da_bell_secrets import *
 
 '''
 This is a helper class that contains constants 
@@ -44,9 +44,21 @@ DESKTOP_DIR = "/home/littleone/Desktop/Da-Bell"
 PHOTOS_FOLDER = "Photos"
 SHORTCLIPS_FOLDER = "ShortClips"
 
+# mms constants
+APP_NAME = "Da Bell"
+DOOR_RING_MESSAGE = "Doorbell was pressed."
+SMTP_GMAIL = "smtp.gmail.com"
+SMTP_PORT = 465
+FILE_TYPE = "image"
+MESSAGE_TYPE = ["mms", "sms"]
+MMS_SUPPORT_KEY = "mms_support"
+TEXT_TYPE = "plain"
+READ_BINARY = "rb"
+
 # see if credentials exist in secrets_firebase.py
 def is_credentials_added():
-    return EMPTY not in [API_KEY, AUTH_DOMAIN, DATABASE_URL, STORAGE_BUCKET]
+    return EMPTY not in [API_KEY, AUTH_DOMAIN, DATABASE_URL, 
+        STORAGE_BUCKET, PHONE_NUMBER, SENDER_CREDENTIALS, PHONE_PROVIDER]
 
 # exceptions
 class NoCredentialsAdded(Exception):
