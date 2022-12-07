@@ -55,26 +55,26 @@ def wait_for_doorbell(firebase_database):
 # start streaming camera to server
 def start_stream():
     # change directory
-    change_directory(helper.stream_dir)
+    change_directory(helper.STREAM_DIR)
     # start stream
-    run_shell_command(helper.start_stream)
+    run_shell_command(helper.START_STREAM)
     print(f"{' START ':-^30}\nStreaming...")
     return push_camera_to_server()
 
 # start streaming camera to server
 def resume_stream():
     # change directory
-    change_directory(helper.stream_dir)
+    change_directory(helper.STREAM_DIR)
     # resume stream
-    run_shell_command(helper.start_stream)
+    run_shell_command(helper.START_STREAM)
     print("Resuming Streaming...")
     
 # stop streaming camera feed to server
 def stop_stream():
     # change directory
-    change_directory(helper.stream_dir)
+    change_directory(helper.STREAM_DIR)
     # stop stream
-    run_shell_command(helper.stop_stream)
+    run_shell_command(helper.STOP_STREAM)
     print("Stopped streaming")
 
 # enable motion detection
@@ -97,9 +97,9 @@ def change_directory(new_dir):
 # return public url link to camera feed
 def push_camera_to_server():
     # change directory
-    change_directory(helper.desktop_dir)
+    change_directory(helper.DESKTOP_DIR)
     # kill ngrok process, it should not be running
-    run_shell_command(helper.stop_ngrok)
+    run_shell_command(helper.STOP_NGROK)
     # start ngrok server
     print("Starting server...")
     start_server_result = ngrok.connect(bind_tls=True)
@@ -130,9 +130,9 @@ def create_folder(current_dir, folder_name):
 # return photo path, photo filename, and date (formatted)
 def take_photo():
     # change directory
-    change_directory(helper.desktop_dir)
+    change_directory(helper.DESKTOP_DIR)
     # if Photos folder does not exist, create it
-    photos_dir = create_folder(os.getcwd(), helper.photos_dir) 
+    photos_dir = create_folder(os.getcwd(), helper.PHOTOS_FOLDER) 
     # delete photo from inside Photos folder 
     # after 20 seconds since it has been uploaded
     # to firebase storage and is no longer needed
@@ -152,9 +152,9 @@ def take_photo():
 # return video path, video filename, and its date (formatted)
 def take_shortclip():
     # change directory
-    change_directory(helper.desktop_dir)
+    change_directory(helper.DESKTOP_DIR)
     # if ShortCLips folder does not exist, create it
-    shortclips_dir = create_folder(os.getcwd(), helper.shortclips_dir)      
+    shortclips_dir = create_folder(os.getcwd(), helper.SHORTCLIPS_FOLDER)      
     # delete shortclip from inside ShortClips folder 
     # after 20 seconds since it has been uploaded
     # to firebase storage and is no longer needed
