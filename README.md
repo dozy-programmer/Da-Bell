@@ -16,8 +16,8 @@ Da Bell can stream the camera feed from a Raspberry Pi device to a public facing
 ## Installation:
 
 #### OS Requirement:
-- Buster
- - used instead of bulls-eye due to compatibility issues with packages + RPi Cam Web Interface.
+- OS &#8594; Buster
+- ❌ Bullseye &#8594; compatibility issues with packages + RPi Cam Web Interface
 
 #### Hardware Requirements:
 - Camera
@@ -41,7 +41,7 @@ pip install -r requirements.txt
 
 ##### 2. Download [RPi-Cam-Web-Interface](https://elinux.org/RPi-Cam-Web-Interface#Installation_Instructions) by following Installation Instructions
 - Set settings to default during set-up.
-- After set-up, it will ask to start camera, select <yes>.
+- After set-up, it will ask to start camera, select \<yes\>.
 
 ##### 3. Install Ngrok
 1. Create an [account](https://ngrok.com/) to get an auth token.
@@ -50,6 +50,8 @@ pip install -r requirements.txt
 4. Required: place ngrok file inside Da Bell folder.
 5. Run the following in your command line:
 ```shell
+# verify you are in Da Bell directory
+pwd
 ./ngrok authtoken <your-auth-token>
 # then to start tunnel on port 80 for localhost
 ./ngrok http 80
@@ -58,7 +60,7 @@ pip install -r requirements.txt
 ```
 
 ##### 4. Add Credentials
-Enter all the credentials needed in da_bell_secrets.py file, program will not run otherwise.  
+- Enter all the credentials needed in da_bell_secrets.py file, program will not run otherwise.  
 
 Required:  
 - firebase information
@@ -97,10 +99,10 @@ Da Bell also has an [iOS app](https://github.com/CollinLTT/CS578-Da-Bell) where 
 
 Audio and speaker capabilities can be added to Da Bell, but was not included to keep costs to a minimum. In addition, this prototype was created to only show video because there isn't many low-cost options that did not include extra hardware (like a speaker and microphone, thus higher price). In essense, we wanted to make a modular door bell camera that can be improved by just plugging in hardware and enabling the respective feature. These features can be added without any issues to existing project. Therefore, Da bell is a base prototype and anyone can improve Da Bell!
 
-Ideas:
- - when motion is detected, send the user a text message
- - change setting to send user a text when motion is detected
-   - How can this be accomplished? 
-     - this can be enabled/disabled via the iOS App
+Ideas for Improvement:
+ - when motion is detected, send the user a text message and save state
+   - when motion if no longer detected, reset state to default
+ - allow ability to change setting to send user a text when motion is detected
+     - setting can be enabled/disabled via the iOS App
      - iOS changes camera settings in firebase
      - Raspberry Pi listens to changes in camera setting from firebase
