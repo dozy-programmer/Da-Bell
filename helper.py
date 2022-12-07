@@ -66,7 +66,7 @@ def is_credentials_added():
 # exceptions
 class NoCredentialsAdded(Exception):
     def __str__(self):
-        return "Credentials missing from secrets_firebase.py file!"
+        return "Credentials missing from da_bell_secrets.py file!"
 
 # create a curl command to start/stop motion detection
 def get_motion_detection_command(is_starting):
