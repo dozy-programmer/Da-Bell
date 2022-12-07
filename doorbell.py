@@ -3,6 +3,7 @@ from gpiozero import Button
 from picamera import PiCamera
 from pyngrok import ngrok
 from time import sleep
+import pathlib
 import helper
 import data_base
 import mms
@@ -43,9 +44,15 @@ def wait_for_doorbell(firebase_database):
     firebase_database.upload_file(shortclip_filename, shortclip_path, False)
     
     # send the owner a text message that doorbell was pressed
-    mms.send_text_message()
+    mms.send_text_message(photo_path)
     # mark completion (doorbell press has been handled)
     print(f"{' END ':-^30}")
+    
+    # delete photo + shortclip from their respective 
+    # folder after 20 seconds since they has been 
+    # uploaded to firebase storage and are no longer needed
+    helper.delete_directory_files(pathlib.PurePath(photo_path).parent.name)
+    helper.delete_directory_files(pathlib.PurePath(shortclip_path).parent.name)
     
     # resume steaming to online server
     resume_stream()
@@ -133,10 +140,6 @@ def take_photo():
     change_directory(helper.DESKTOP_DIR)
     # if Photos folder does not exist, create it
     photos_dir = create_folder(os.getcwd(), helper.PHOTOS_FOLDER) 
-    # delete photo from inside Photos folder 
-    # after 20 seconds since it has been uploaded
-    # to firebase storage and is no longer needed
-    helper.delete_directory_files(photos_dir)
              
     # open camera
     with PiCamera() as camera:
@@ -155,10 +158,6 @@ def take_shortclip():
     change_directory(helper.DESKTOP_DIR)
     # if ShortCLips folder does not exist, create it
     shortclips_dir = create_folder(os.getcwd(), helper.SHORTCLIPS_FOLDER)      
-    # delete shortclip from inside ShortClips folder 
-    # after 20 seconds since it has been uploaded
-    # to firebase storage and is no longer needed
-    helper.delete_directory_files(shortclips_dir)
           
     # open camera
     with PiCamera() as camera:

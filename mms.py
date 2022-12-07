@@ -63,4 +63,5 @@ def __send_mms_via_email(file_path):
     with smtplib.SMTP_SSL(smtp_server, smtp_port, context = ssl.create_default_context()) as email:
         email.login(sender_email, email_password)
         email.sendmail(sender_email, receiver_email, email_message.as_string())
+        print("Da Bell owner notified that doorbell was pressed")
         
