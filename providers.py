@@ -1,3 +1,11 @@
+# List of phone carriers
+# Select from: 
+# "AT&T", "Boost Mobile", "C-Spire", "Cricket Wireless", 
+# "Consumer Cellular", "Google Project Fi", "Metro PCS", 
+# "Mint Mobile", "Page Plus", "Republic Wireless", "Sprint",
+# "Straight Talk", "T-Mobile", "Ting", "Tracfone", "U.S. 
+#  Cellular", "Verizon", "Virgin Mobile", "Xfinity Mobile"
+
 PROVIDERS = {
     "AT&T": {"sms": "txt.att.net", "mms": "mms.att.net", "mms_support": True},
     "Boost Mobile": {

@@ -159,8 +159,10 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-# local files and folders to not commit
+##### local files and folders to not commit #####
+
 # files
 da_bell_secrets_private.py
+
 # folders
 cs578

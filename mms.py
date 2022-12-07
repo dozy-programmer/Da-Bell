@@ -1,31 +1,31 @@
 import helper
-from da_bell_secrets import *
-import smtplib, ssl
+from da_bell_secrets_private import *
 from providers import PROVIDERS
-# used for MMS
+import smtplib, ssl
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from os.path import basename
 import pathlib
 
 ''' 
-This program sends an SMS/MMS message to the owner of a 
-Da Bell device to notify them that the doorbell was pressed.
+This program sends an SMS/MMS message to the 
+owner of a Da Bell device to notify them that 
+the doorbell was pressed along with a photo. 
 '''
 
-@helper.threaded
 def send_text_message(file_path):
     __send_mms_via_email(file_path)
-    
+
+@helper.threaded
 def __send_mms_via_email(file_path):
-    # get info needed
+    # initialize variables needed
     phone_number: str = PHONE_NUMBER
     door_ring_message: str = helper.DOOR_RING_MESSAGE
     file_path: str = file_path
     mime_maintype: str = helper.FILE_TYPE
     mime_subtype: str = pathlib.Path(file_path).suffix
+    file_name: str = pathlib.Path(file_path).name
     phone_provider: str = PHONE_PROVIDER
     sender_credentials: tuple = SENDER_CREDENTIALS
     subject: str = helper.APP_NAME
@@ -55,7 +55,7 @@ def __send_mms_via_email(file_path):
         part.set_payload(attachment.read())
         encoders.encode_base64(part)
         part.add_header(
-            "Content-Disposition", f"attachment; filename={basename(file_path)}",
+            "Content-Disposition", f"attachment; filename={file_name}",
         )
         email_message.attach(part)
 
@@ -63,3 +63,4 @@ def __send_mms_via_email(file_path):
     with smtplib.SMTP_SSL(smtp_server, smtp_port, context = ssl.create_default_context()) as email:
         email.login(sender_email, email_password)
         email.sendmail(sender_email, receiver_email, email_message.as_string())
+        

@@ -3,8 +3,8 @@ from dataclasses import dataclass
 import helper
 
 '''
-This program upload data to firebase 
-database and media to firebase storage. 
+This program uploads photo and video data to firebase 
+database and the associated media to firebase storage. 
 '''
 
 @dataclass

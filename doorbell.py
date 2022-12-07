@@ -10,7 +10,8 @@ import subprocess
 import os
 
 # waits until a button ("doorbell") is pressed
-# and takes a photo + video, then uploads to firebase
+# pauses live stream, takes a photo + video, 
+# and then uploads to firebase
 def wait_for_doorbell(firebase_database):
     print("Waiting for door bell to be pressed...")
     # button connected to GPIO PIN 17 
@@ -131,16 +132,16 @@ def take_photo():
     # change directory
     change_directory(helper.desktop_dir)
     # if Photos folder does not exist, create it
-    photos_dir = create_folder(os.getcwd(), helper.photos_dir)            
+    photos_dir = create_folder(os.getcwd(), helper.photos_dir)   
+             
     # open camera
-    camera = PiCamera()
-    # create path to save photo to
-    photo_filename, formatted_date = helper.create_filename_name(True)
-    photo_path = f"{photos_dir}/{photo_filename}"
-    # take photo and save to path
-    camera.capture(photo_path)
-    # close camera after using
-    camera.close()
+    with PiCamera() as camera:
+        # create path to save photo to
+        photo_filename, formatted_date = helper.create_filename_name(True)
+        photo_path = f"{photos_dir}/{photo_filename}"
+        # take photo and save to path
+        camera.capture(photo_path)
+        
     return photo_path, photo_filename, formatted_date
 
 # take a short video (3 seconds long called "shortclip")
@@ -152,25 +153,23 @@ def take_shortclip():
     shortclips_dir = create_folder(os.getcwd(), helper.shortclips_dir)      
           
     # open camera
-    camera = PiCamera()
-    # camera preferences
-    camera.vflip = False
-    camera.framerate = 15
-    camera.resolution = (720, 440)
-    # change frame rate
-    camera.framerate = 20
-    
-    shortclip_filename, formatted_date = helper.create_filename_name(False)
-    shortclip_path = f"{shortclips_dir}/{shortclip_filename}"
-    # start recording 3 second video
-    camera.start_recording(shortclip_path)
-    print("Recording started...")
-    # record 3 second video
-    camera.wait_recording(helper.VIDEO_DURATION)
-    camera.stop_recording()
-    print("Recording stopped...")
-    # close camera after using
-    camera.close()
+    with PiCamera() as camera:
+        # camera preferences
+        camera.vflip = False
+        camera.framerate = 15
+        camera.resolution = (720, 440)
+        # change frame rate
+        camera.framerate = 20
+        
+        shortclip_filename, formatted_date = helper.create_filename_name(False)
+        shortclip_path = f"{shortclips_dir}/{shortclip_filename}"
+        # start recording 3 second video
+        camera.start_recording(shortclip_path)
+        print("Recording started...")
+        # record 3 second video
+        camera.wait_recording(helper.VIDEO_DURATION)
+        camera.stop_recording()
+        print("Recording stopped...")
     
     # convert .h264 file to .mp4 and delete .h264 file
     new_shortclip_path = shortclip_path.replace(helper.H264_EXT, helper.MP4_EXT)
@@ -191,11 +190,15 @@ def main():
     print(f"Streaming Link -> {stream_link}")
     # upload public url link to firebase
     firebase_database.add_link_to_live_feed(stream_link)
+    
     # start motion detection
     start_motion_detection()
     
-    # wait for button press again after finishing
-    # taking a photo + video and uploading them
+    # wait for doorbell button press again 
+    # after finishing taking a photo + video 
+    # and uploading them. This while loop 
+    # does not continously run as 
+    # wait_for_doorbell() blocks the main thread 
     while True:
         wait_for_doorbell(firebase_database)
     
