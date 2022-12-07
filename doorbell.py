@@ -132,7 +132,11 @@ def take_photo():
     # change directory
     change_directory(helper.desktop_dir)
     # if Photos folder does not exist, create it
-    photos_dir = create_folder(os.getcwd(), helper.photos_dir)   
+    photos_dir = create_folder(os.getcwd(), helper.photos_dir) 
+    # delete photo from inside Photos folder 
+    # after 20 seconds since it has been uploaded
+    # to firebase storage and is no longer needed
+    helper.delete_directory_files(photos_dir)
              
     # open camera
     with PiCamera() as camera:
@@ -151,6 +155,10 @@ def take_shortclip():
     change_directory(helper.desktop_dir)
     # if ShortCLips folder does not exist, create it
     shortclips_dir = create_folder(os.getcwd(), helper.shortclips_dir)      
+    # delete shortclip from inside ShortClips folder 
+    # after 20 seconds since it has been uploaded
+    # to firebase storage and is no longer needed
+    helper.delete_directory_files(shortclips_dir)
           
     # open camera
     with PiCamera() as camera:

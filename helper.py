@@ -1,5 +1,7 @@
+import os
 import threading
 import functools
+from time import sleep
 from datetime import datetime
 from da_bell_secrets import *
 
@@ -18,6 +20,7 @@ config = {
 
 # constants
 EMPTY = ""
+WAIT_DURATION = 20
 
 # database_base.py constants
 LINK_KEY = "link"
@@ -89,3 +92,19 @@ def threaded(func):
         thread.start()
         return thread
     return wrapper
+
+# delete files inside directory 20 secs after calling
+# number is arbitrary to ensure enough time is given
+# for files to upload to firebase storage
+@threaded
+def delete_directory_files(path):
+    # wait before deleting files
+    sleep(WAIT_DURATION)
+    # go through all files in directory
+    for file_name in os.listdir(path):
+        # construct full file path
+        file = path + file_name
+        # make sure file exists
+        if os.path.isfile(file):
+            # delete file
+            os.remove(file)
