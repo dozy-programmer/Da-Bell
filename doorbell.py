@@ -1,13 +1,14 @@
-from gpiozero import LED
-from gpiozero import Button
 from picamera import PiCamera
+from gpiozero import Button
 from pyngrok import ngrok
+from gpiozero import LED
 from time import sleep
+import subprocess
+import data_base
+import requests
 import pathlib
 import helper
-import data_base
 import mms
-import subprocess
 import os
 
 # waits until a button ("doorbell") is pressed
@@ -26,7 +27,8 @@ def wait_for_doorbell(firebase_database):
     stop_motion_detection()
     # stop stream
     stop_stream()
-    # give motion detection and streaming some extra time to stop
+    # give motion detection and stream some extra 
+    # time to stop, will randomly crash otherwise
     sleep(1)
     
     # take a photo
@@ -49,10 +51,11 @@ def wait_for_doorbell(firebase_database):
     print(f"{' END ':-^30}")
     
     # delete photo + shortclip from their respective 
-    # folder after 20 seconds since they has been 
+    # folder after 15 seconds since they have been 
     # uploaded to firebase storage and are no longer needed
-    helper.delete_directory_files(pathlib.PurePath(photo_path).parent.name)
-    helper.delete_directory_files(pathlib.PurePath(shortclip_path).parent.name)
+    # so that we save storage space
+    helper.delete_directory_files(pathlib.PurePath(photo_path).parent)
+    helper.delete_directory_files(pathlib.PurePath(shortclip_path).parent)
     
     # resume steaming to online server
     resume_stream()
@@ -143,6 +146,10 @@ def take_photo():
              
     # open camera
     with PiCamera() as camera:
+        # photo needs to be under 1M to be able to be sent
+        # as an attachment when sending message. the 
+        # resolution was adjusted manually to get close to 1M
+        camera.resolution = (1470, 630)
         # create path to save photo to
         photo_filename, formatted_date = helper.create_filename_name(True)
         photo_path = f"{photos_dir}/{photo_filename}"
@@ -208,8 +215,32 @@ def main():
     # wait_for_doorbell() blocks the main thread 
     while True:
         wait_for_doorbell(firebase_database)
+
+# make a request to google's server and if the response
+# is 204, then internet is connected, else no internet
+def check_for_internet_connection():
+    try:
+        # test for internet connection by making
+        # a request to google's servers
+        response = requests.get(helper.TEST_INTERNET_LINK)
+    except requests.exceptions.ConnectionError:
+        print(help.NO_INTERNET_MESSAGE)
+        # try again after 5 seconds
+        sleep(helper.MEDIUM_DELAY)
+        check_for_internet_connection()
+        return
+        
+    # if response is not 204, then error
+    if response.status_code != 204:
+        print(helper.NO_INTERNET_MESSAGE)
+        sleep(helper.MEDIUM_DELAY)
+        check_for_internet_connection()
+    else:
+        # internet connected, continue to app
+        print(helper.INTERNET_CONNECTED_MESSAGE)
     
     
 if __name__ == '__main__':
+    check_for_internet_connection()
     main()
     

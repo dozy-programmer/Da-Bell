@@ -20,7 +20,7 @@ config = {
 
 # constants
 EMPTY = ""
-WAIT_DURATION = 20
+WAIT_DURATION = 15
 
 # database_base.py constants
 LINK_KEY = "link"
@@ -46,6 +46,11 @@ DESKTOP_DIR = "/home/littleone/Desktop/Da-Bell"
 # folder names
 PHOTOS_FOLDER = "Photos"
 SHORTCLIPS_FOLDER = "ShortClips"
+TEST_INTERNET_LINK = "http://clients3.google.com/generate_204"
+NO_INTERNET_MESSAGE = "No internet connection, waiting 5 seconds to try again..."
+INTERNET_CONNECTED_MESSAGE = "Internet Connected..."
+SMALL_DELAY = 1
+MEDIUM_DELAY = 5
 
 # mms constants
 APP_NAME = "Da Bell"
@@ -56,7 +61,7 @@ FILE_TYPE = "image"
 MESSAGE_TYPE = ["mms", "sms"]
 MMS_SUPPORT_KEY = "mms_support"
 TEXT_TYPE = "plain"
-READ_BINARY = "rb"
+READ_BINARY = 'rb'
 
 # see if credentials exist in secrets_firebase.py
 def is_credentials_added():
@@ -103,7 +108,7 @@ def delete_directory_files(path):
     # go through all files in directory
     for file_name in os.listdir(path):
         # construct full file path
-        file = path + file_name
+        file = f"{path}/{file_name}"
         # make sure file exists
         if os.path.isfile(file):
             # delete file
