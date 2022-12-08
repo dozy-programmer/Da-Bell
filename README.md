@@ -82,7 +82,7 @@ python doorbell.py
 # then it will send the user a message + photo that someone is at the door
 # user can see the photo and 3 second video taken on the app
 ```
-##### 6. Autorun on Boot
+##### 6. \<optional\> Autorun on Boot 
 ```shell
 # edit this file
 sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
