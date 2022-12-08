@@ -82,7 +82,17 @@ python doorbell.py
 # then it will send the user a message + photo that someone is at the door
 # user can see the photo and 3 second video taken on the app
 ```
-##
+##### 6. Autorun on Boot
+```shell
+# edit this file
+sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
+# add this to end of file
+@lxterminal -e python /home/littleone/Desktop/Da-Bell/doorbell.py
+# save, close program, and reboot
+# note: lxterminal is needed so that it waits until the GUI boots and then
+# runs a terminal, then it executes the program. If I try to run without 
+# terminal, it crashes due to no Wifi and some other reasons.
+```
 
 ## iOS App:
 
