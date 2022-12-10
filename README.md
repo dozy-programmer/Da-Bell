@@ -11,13 +11,13 @@ Da Bell is a custom-made Ring Doorbell alternative that is low-lost and provides
 
 ## Capabilities:
 
-Da Bell can stream the camera feed from a Raspberry Pi device to a public facing server that can be accessed via a link. The link is uploaded to firebase database so that the iOS app can show the feed in a webview. In addition, if the doorbell is pressed, a photo and a 3 second video is taken and uploaded to firebase storage so that it can be viewed on the iOS app while simultaneously, a message is sent to the Da Bell owner that the doorbell was pressed and a photo is attached for them to view. Lastly, motion detection is utilized so that when motion is detected, the camera feed is saved locally on the Raspberry Pi and it can be viewed by the owner via the iOS app. 
+Da Bell can stream the camera feed from a Raspberry Pi device to a public facing server that can be accessed via a link. The link is uploaded to firebase database so that the iOS app can show the feed in a webview. In addition, if the doorbell is pressed, a photo and a 3 second video is taken and uploaded to firebase storage so that it can be viewed on the iOS app while simultaneously, a message is sent to the Da Bell owner that the doorbell was pressed and a photo is attached for them to view. Lastly, motion detection is utilized so that when motion is detected, the camera feed is saved locally on the Raspberry Pi and it can be viewed by the owner via the iOS app without the need for downloading. 
 
 ## Installation:
 
-#### OS Requirement:
-- OS &#8594; Buster
-- ❌ Bullseye &#8594; compatibility issues with packages + RPi Cam Web Interface
+#### OS:
+- Bullseye 32-Bit
+- Da Bell only works on the 32-Bit Raspberry Pi OS 
 
 #### Hardware Requirements:
 - Camera
@@ -87,7 +87,7 @@ python doorbell.py
 # edit this file
 sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
 # add this to end of file
-@lxterminal -e python /home/littleone/Desktop/Da-Bell/doorbell.py
+@lxterminal -e python /home/littleone/Desktop/Da-Bell/doorbell.py &
 # save, close program, and reboot
 # note: lxterminal is needed so that it waits until the GUI boots and then
 # runs a terminal, then it executes the program. If I try to run without 
